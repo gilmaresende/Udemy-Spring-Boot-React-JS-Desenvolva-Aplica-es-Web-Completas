@@ -1,8 +1,13 @@
 package com.condelar.minhasfinancas.services.impl;
 
+import java.util.Optional;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.condelar.minhasfinancas.exception.ErroAutenticacao;
 import com.condelar.minhasfinancas.exception.RegraNegocioException;
 import com.condelar.minhasfinancas.model.entity.Usuario;
 import com.condelar.minhasfinancas.model.repository.UsuarioRepository;
@@ -17,29 +22,34 @@ public class UsuarioServiceImpl implements UsuarioService {
 	public UsuarioServiceImpl(UsuarioRepository repository) {
 		super();
 		this.repository = repository;
-		// TODO Auto-generated constructor stub
+
 	}
 
 	@Override
 	public Usuario autenticar(String email, String senha) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Usuario> usuarios = repository.findByEmail(email);
+		if (!usuarios.isPresent()) {
+			throw new ErroAutenticacao("Usuario não encontrado!");
+		}
+		if (!usuarios.get().getSenha().equals(senha)) {
+			throw new ErroAutenticacao("Senha Invalida!");
+		}
+		return usuarios.get();
 	}
 
 	@Override
+	@Transactional
 	public Usuario salvarUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
-		return null;
+		validarEmail(usuario.getEmail());
+		return repository.save(usuario);
 	}
 
 	@Override
 	public void validarEmail(String email) {
 		boolean existe = repository.existsByEmail(email);
-		
-		if(existe) {
+
+		if (existe) {
 			throw new RegraNegocioException("Email já utilizado!");
 		}
-
 	}
-
 }
