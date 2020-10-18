@@ -4,8 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.condelar.minhasfinancas.model.entity.Usuario;
 
-public interface UsuarioRepositor extends JpaRepository<Usuario, Long> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	
-	boolean existsEmail(String email);
+	boolean existsByEmail(String email);
 
 }

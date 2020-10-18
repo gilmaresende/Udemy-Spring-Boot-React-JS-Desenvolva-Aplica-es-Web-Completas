@@ -5,16 +5,16 @@ import org.springframework.stereotype.Service;
 
 import com.condelar.minhasfinancas.exception.RegraNegocioException;
 import com.condelar.minhasfinancas.model.entity.Usuario;
-import com.condelar.minhasfinancas.model.repository.UsuarioRepositor;
+import com.condelar.minhasfinancas.model.repository.UsuarioRepository;
 import com.condelar.minhasfinancas.services.UsuarioService;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
-	private UsuarioRepositor repository;
+	private UsuarioRepository repository;
 
 	@Autowired
-	public UsuarioServiceImpl(UsuarioRepositor repository) {
+	public UsuarioServiceImpl(UsuarioRepository repository) {
 		super();
 		this.repository = repository;
 		// TODO Auto-generated constructor stub
@@ -34,7 +34,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public void validarEmail(String email) {
-		boolean existe = repository.existsEmail(email);
+		boolean existe = repository.existsByEmail(email);
 		
 		if(existe) {
 			throw new RegraNegocioException("Email já utilizado!");
