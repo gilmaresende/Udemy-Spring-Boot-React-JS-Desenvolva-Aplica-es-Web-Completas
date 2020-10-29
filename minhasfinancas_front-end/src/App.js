@@ -2,7 +2,8 @@ import React from "react";
 
 import Login from "./views/login";
 
-import 'bootswatch/dist/flatly/bootstrap.min.css'
+import "bootswatch/dist/flatly/bootstrap.min.css";
+import "./custom.css";
 
 class App extends React.Component {
   render() {
