@@ -9,7 +9,7 @@ function Rotas() {
     <HashRouter>
       <Switch>
         <Route path="/login" component={Login} />
-        <Route path="/cadastroUsuario" component={CadastroUsuario} />
+        <Route path="/cadastro-usuario" component={CadastroUsuario} />
       </Switch>
     </HashRouter>
   );
