@@ -83,7 +83,7 @@ public class LancamentoRepositoryTest {
         return lancamento;
     }
 
-    private Lancamento newLancamento() {
+    public static Lancamento newLancamento() {
         Lancamento lancamento = new Lancamento().builder().
                 mes(1).
                 ano(2019).
