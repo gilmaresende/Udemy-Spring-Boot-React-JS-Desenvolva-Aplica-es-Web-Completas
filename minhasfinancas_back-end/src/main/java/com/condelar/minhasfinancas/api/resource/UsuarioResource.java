@@ -1,5 +1,6 @@
 package com.condelar.minhasfinancas.api.resource;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,13 +16,10 @@ import com.condelar.minhasfinancas.services.UsuarioService;
 
 @RestController
 @RequestMapping("/api/usuario")
+@RequiredArgsConstructor
 public class UsuarioResource {
 
 	private UsuarioService service;
-
-	public UsuarioResource(UsuarioService service) {
-		this.service = service;
-	}
 
 	@PostMapping("/autenticar")
 	public ResponseEntity autenticar(@RequestBody Usuario dto) {
@@ -33,7 +31,7 @@ public class UsuarioResource {
 		}
 	}
 
-	@PostMapping("/salvar")
+	@PostMapping
 	public ResponseEntity salvar(@RequestBody UsuarioDTO dto) {
 		Usuario usuario = Usuario.builder().nome(dto.getNome()).email(dto.getEmail()).senha(dto.getSenha()).build();
 		try {

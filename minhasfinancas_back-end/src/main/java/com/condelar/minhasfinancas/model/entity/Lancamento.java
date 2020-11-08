@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import com.condelar.minhasfinancas.model.enums.StatusLancamento;
@@ -25,7 +26,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Builder
+@NoArgsConstructor
 @Table(name = "lancamento", schema = "financas")
 public class Lancamento {
 
