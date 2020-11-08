@@ -1,5 +1,6 @@
 package com.condelar.minhasfinancas.api.resource;
 
+import com.condelar.minhasfinancas.api.dto.AtualizaStatusDTO;
 import com.condelar.minhasfinancas.api.dto.LancamentoDTO;
 import com.condelar.minhasfinancas.exception.RegraNegocioException;
 import com.condelar.minhasfinancas.model.entity.Lancamento;
@@ -24,6 +25,25 @@ public class LancamentoResource {
     private final LancamentoService service;
     private final UsuarioService serviceUsuario;
 
+    @PutMapping("{id}/atualiza-status")
+    public ResponseEntity atualizarStatus(@PathVariable("id") Long id, @RequestBody AtualizaStatusDTO dto) {
+        return service.findById(id).map(entity -> {
+            StatusLancamento statusSelecionado = StatusLancamento.valueOf(dto.getStatus());
+            if (statusSelecionado == null) {
+                return ResponseEntity.badRequest().body("Não foi possivel atualizar o status do Lancamento");
+            } else {
+                try {
+                    entity.setStatus(statusSelecionado);
+                    service.atualizar(entity);
+                    return ResponseEntity.ok(entity);
+
+                } catch (RegraNegocioException e) {
+                    return ResponseEntity.badRequest().body(e.getMessage());
+                }
+            }
+        }).orElseGet(() -> new ResponseEntity("Lancamento não encontrado na base de Dados", HttpStatus.BAD_REQUEST));
+    }
+
     @GetMapping
     public ResponseEntity buscar(@RequestParam(value = "descricao", required = false) String descricao,
                                  @RequestParam(value = "mes", required = false) Integer mes,
@@ -36,7 +56,7 @@ public class LancamentoResource {
         lancamentoFiltro.setAno(ano);
 
         Optional<Usuario> usuario = serviceUsuario.findById(idUsuario);
-        if (usuario.isPresent()) {
+        if (!usuario.isPresent()) {
             return ResponseEntity.badRequest().body("Não foi possivel realizar a consulta");
         } else {
             lancamentoFiltro.setUsuario(usuario.get());
@@ -89,7 +109,7 @@ public class LancamentoResource {
         Usuario user = serviceUsuario.findById(dto.getUsuario()).orElseThrow(() -> new RegraNegocioException(("Usuario não existente!")));
         lancamento.setUsuario(user);
         lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));
-        if(dto.getStatus()!=null){
+        if (dto.getStatus() != null) {
             lancamento.setStatus(StatusLancamento.valueOf(dto.getStatus()));
         }
 

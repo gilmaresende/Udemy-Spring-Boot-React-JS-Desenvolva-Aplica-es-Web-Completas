@@ -3,6 +3,7 @@ package com.condelar.minhasfinancas.services.impl;
 import com.condelar.minhasfinancas.exception.RegraNegocioException;
 import com.condelar.minhasfinancas.model.entity.Lancamento;
 import com.condelar.minhasfinancas.model.enums.StatusLancamento;
+import com.condelar.minhasfinancas.model.enums.TipoLancamento;
 import com.condelar.minhasfinancas.model.repository.LancamentoRepository;
 import com.condelar.minhasfinancas.services.LancamentoService;
 import org.springframework.data.domain.Example;
@@ -94,5 +95,18 @@ public class LancamentoServiceImpl implements LancamentoService {
     @Override
     public Optional<Lancamento> findById(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public BigDecimal consultarSaldoPorUsuario(Long id) {
+        BigDecimal receitas = repository.consultarSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.RECEITA);
+        BigDecimal despesas = repository.consultarSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.DESPESA);
+        if (receitas == null) {
+            receitas = BigDecimal.ZERO;
+        }
+        if (despesas == null) {
+            despesas = BigDecimal.ZERO;
+        }
+        return receitas.subtract(despesas);
     }
 }
