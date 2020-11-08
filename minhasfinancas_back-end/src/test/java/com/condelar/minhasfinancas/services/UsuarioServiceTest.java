@@ -1,4 +1,4 @@
-package com.condelar.minhasfinancas.service;
+package com.condelar.minhasfinancas.services;
 
 import java.util.Optional;
 
