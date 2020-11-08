@@ -22,6 +22,7 @@ class Login extends React.Component {
         senha: this.state.senha,
       })
       .then((response) => {
+        console.log(response.data);
         this.props.history.push("/home");
       })
       .catch((erro) => {
