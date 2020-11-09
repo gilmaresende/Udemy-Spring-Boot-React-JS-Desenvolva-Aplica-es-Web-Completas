@@ -23,7 +23,7 @@ public class UsuarioResource {
     private final LancamentoService lancamentoService;
 
     @PostMapping("/autenticar")
-    public ResponseEntity autenticar(@RequestBody Usuario dto) {
+    public ResponseEntity autenticar(@RequestBody UsuarioDTO dto) {
         try {
             Usuario usuarioAutenticado = service.autenticar(dto.getEmail(), dto.getSenha());
             return ResponseEntity.ok(usuarioAutenticado);
