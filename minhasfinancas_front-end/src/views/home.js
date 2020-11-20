@@ -1,9 +1,24 @@
 import React from "react";
+import axios from "axios";
 
 class Home extends React.Component {
   state = {
     saldo: 0,
   };
+
+  componentDidMount() {
+    const usuarioLogadoStr = localStorage.getItem("_usuario_logado");
+    const usuarioLogado = JSON.parse(usuarioLogadoStr);
+    axios
+      .get(`http://localhost:8080/api/usuario/${usuarioLogado.id}/saldo`)
+      .then((response) => {
+        this.setState({ saldo: response.data });
+      })
+      .catch((erro) => {
+        console.error(erro.response);
+      });
+  }
+
   render() {
     return (
       <div className="jumbotron">

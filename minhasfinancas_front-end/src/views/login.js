@@ -2,8 +2,7 @@ import React from "react";
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
 import { withRouter } from "react-router-dom";
-import axios from "axios";
-
+import UsuarioService from "../app/service/usuarioService";
 class Login extends React.Component {
   state = {
     email: "",
@@ -11,18 +10,23 @@ class Login extends React.Component {
     mensagemErro: null,
   };
 
+  constructor() {
+    super();
+    this.service = new UsuarioService();
+  }
   prepareCadastrar = () => {
     this.props.history.push("/cadastro-usuario");
   };
 
   entrar = () => {
-    axios
-      .post("http://localhost:8080/api/usuario/autenticar", {
+
+    this.service
+      .autenticar({
         email: this.state.email,
         senha: this.state.senha,
       })
       .then((response) => {
-        console.log(response.data);
+        localStorage.setItem("_usuario_logado", JSON.stringify(response.data));
         this.props.history.push("/home");
       })
       .catch((erro) => {
