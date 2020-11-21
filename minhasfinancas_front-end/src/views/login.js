@@ -3,11 +3,12 @@ import Card from "../components/card";
 import FormGroup from "../components/form-group";
 import { withRouter } from "react-router-dom";
 import UsuarioService from "../app/service/usuarioService";
+import LocalStorageService from "../app/service/localstorageservice";
+import { mensagemErro } from "../components/toastr";
 class Login extends React.Component {
   state = {
     email: "",
     senha: "",
-    mensagemErro: null,
   };
 
   constructor() {
@@ -19,18 +20,17 @@ class Login extends React.Component {
   };
 
   entrar = () => {
-
     this.service
       .autenticar({
         email: this.state.email,
         senha: this.state.senha,
       })
       .then((response) => {
-        localStorage.setItem("_usuario_logado", JSON.stringify(response.data));
+        LocalStorageService.addItem("_usuario_logado", response.data);
         this.props.history.push("/home");
       })
       .catch((erro) => {
-        this.setState({ mensagemErro: erro.response.data });
+        mensagemErro(erro.response.data);
       });
   };
 
@@ -43,9 +43,6 @@ class Login extends React.Component {
         >
           <div className="bs-docs-section">
             <Card title="Login">
-              <div className="row">
-                <span>{this.state.mensagemErro}</span>
-              </div>
               <div className="row">
                 <div className="col-lg-12">
                   <div className="bs-component">

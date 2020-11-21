@@ -3,15 +3,32 @@ import React from "react";
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
 import { withRouter } from "react-router-dom";
+import UsuarioService from "../app/service/usuarioService";
+import { mensagemErro, mensagemSucesso } from "../components/toastr";
 
 class CadastroUsuario extends React.Component {
   state = { nome: "", email: "", senha: "", senhaRepetida: "" };
 
+  constructor() {
+    super();
+    this.service = new UsuarioService();
+  }
+
   salvar = () => {
-    if (this.state.senha === this.state.senhaRepetida) {
-    } else {
-      console.log("Senhas não conhecidem!");
-    }
+    const usuario = {
+      nome: this.state.nome,
+      email: this.state.email,
+      senha: this.state.senha,
+    };
+    this.service
+      .salvar(usuario)
+      .then((response) => {
+        mensagemSucesso("Usuario Cadastrado com Sucesso! Faça o login!");
+        this.props.history.push("/login");
+      })
+      .catch((erro) => {
+        mensagemErro(erro.response.data);
+      });
   };
 
   cancelar = () => {
