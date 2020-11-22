@@ -1,14 +1,30 @@
 import React from "react";
-
+import Formatter from "currency-formatter";
 export default (props) => {
   const rows = props.lancamentos.map((lancamento) => {
     return (
       <tr key={lancamento.id}>
         <td>{lancamento.descricao}</td>
-        <td>{lancamento.valor}</td>
+        <td>{Formatter.format(lancamento.valor, { locale: "pt-BR" })}</td>
         <td>{lancamento.tipo}</td>
         <td>{lancamento.mes}</td>
         <td>{lancamento.status}</td>
+        <td>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={(e) => props.editAction(lancamento.id)}
+          >
+            Editar
+          </button>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={(e) => props.deleteAction(lancamento)}
+          >
+            Deletar
+          </button>
+        </td>
         <td></td>
       </tr>
     );

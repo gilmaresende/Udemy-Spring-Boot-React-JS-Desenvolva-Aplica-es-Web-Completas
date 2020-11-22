@@ -1,55 +1,69 @@
-//import { render } from "@testing-library/react";
 import React from "react";
-//import { withRouter } from "react-router-dom";
 import Card from "../../components/card";
 import FormGroup from "../../components/form-group";
 import SelectMenu from "../../components/selectMenu";
 import LancamentoTable from "./lancamentosTable";
+import LancamentoService from "../../app/service/lancamentoService";
+import LocalStorageService from "../../app/service/localStorageService";
+import * as menssages from "../../components/toastr";
+import { Button } from "primereact/button";
+
+import { Dialog } from "primereact/dialog";
 
 class ConsultaLancamento extends React.Component {
+  constructor() {
+    super();
+    this.service = new LancamentoService();
+  }
   state = {
     ano: "",
     mes: "",
     tipo: "",
+    descricao: "",
+    showConfirDialog: false,
+    lancamentoDeletar: {},
+    lancamentos: [],
   };
 
   buscar = () => {
-    console.log(this.state);
+    if (!this.state.ano) {
+      menssages.mensagemErro("Informe o Ano!");
+      return false;
+    }
+    const userLogado = LocalStorageService.obterItem("_usuario_logado");
+    const lancamentoFiltro = {
+      ano: this.state.ano,
+      mes: this.state.mes,
+      tipo: this.state.tipo,
+      descricao: this.state.descricao,
+      usuario: userLogado.id,
+    };
+
+    this.service
+      .consultar(lancamentoFiltro)
+      .then((response) => {
+        this.setState({ lancamentos: response.data });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   render() {
-    const meses = [
-      { label: "SELECIONE...", value: "" },
-      { label: "Janeiro", value: "1" },
-      { label: "Fevereiro", value: "2" },
-      { label: "Março", value: "3" },
-      { label: "Abril", value: "4" },
-      { label: "Maio", value: "5" },
-      { label: "Junho", value: "6" },
-      { label: "Julho", value: "7" },
-      { label: "Agosto", value: "8" },
-      { label: "Setembro", value: "9" },
-      { label: "Outubro", value: "10" },
-      { label: "Novembro", value: "11" },
-      { label: "Dezembro", value: "12" },
-    ];
+    const meses = this.service.obterListaMeses();
+    const tiposLancamentos = this.service.obterListaTipos();
 
-    const tiposLancamentos = [
-      { label: "SELECIONE...", value: "" },
-      { label: "Receita", value: "DESPESA" },
-      { label: "Despesa", value: "RECEITA" },
-    ];
+    const confirmeDialogFooter = (
+      <div>
+        <Button label="Confirma" icon="pi pi-check" onClick={this.delete} />
+        <Button
+          label="Cancelar"
+          icon="pi pi-times"
+          onClick={this.cancelarDelecao}
+        />
+      </div>
+    );
 
-    const lancamentos = [
-      {
-        id: 1,
-        descricao: "Salario",
-        valor: "5000",
-        mes: "1",
-        tipo: "Receita",
-        status: "Efetivado",
-      },
-    ];
     return (
       <Card title="Consulta Lançamentos">
         <div className="row">
@@ -62,10 +76,10 @@ class ConsultaLancamento extends React.Component {
                   id="inputAno"
                   value={this.state.ano}
                   onChange={(e) => this.setState({ ano: e.target.value })}
-                  placeholder="Digite o Ano"
+                  placeholder="Digite o Ano..."
                 ></input>
               </FormGroup>
-              <FormGroup htmlForm="inputMes" label="Mes: *">
+              <FormGroup htmlForm="inputMes" label="Mes:">
                 <SelectMenu
                   id="inputMes"
                   className="form-control"
@@ -73,6 +87,16 @@ class ConsultaLancamento extends React.Component {
                   onChange={(e) => this.setState({ mes: e.target.value })}
                   lista={meses}
                 ></SelectMenu>
+              </FormGroup>
+              <FormGroup htmlForm="inputDescricao" label="Descrição:">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="inputDescricao"
+                  value={this.state.descricao}
+                  onChange={(e) => this.setState({ descricao: e.target.value })}
+                  placeholder="Digite a Descrição..."
+                ></input>
               </FormGroup>
               <FormGroup
                 htmlForm="inputTipoLancamento"
@@ -103,13 +127,61 @@ class ConsultaLancamento extends React.Component {
         <div className="row">
           <div className="col-md-12">
             <div className="bs-component">
-              <LancamentoTable lancamentos={lancamentos}></LancamentoTable>
+              <LancamentoTable
+                lancamentos={this.state.lancamentos}
+                deleteAction={this.abrirConfirmacao}
+                editAction={this.editar}
+              ></LancamentoTable>
             </div>
           </div>
+        </div>
+        <div>
+          <Dialog
+            header="Confirmação!?"
+            visible={this.state.showConfirDialog}
+            style={{ width: "50vw" }}
+            modal={true}
+            onHide={() => this.setState({ showConfirDialog: false })}
+            footer={confirmeDialogFooter}
+          >
+            <p>Confimar exclusão do lançamento?</p>
+          </Dialog>
         </div>
       </Card>
     );
   }
+
+  editar = (id) => {
+    console.log("editando: ", id);
+  };
+
+  cancelarDelecao = () => {
+    this.setState({ showConfirDialog: false, lancamentoDeletar: {} });
+  };
+
+  abrirConfirmacao = (lancamento) => {
+    this.setState({ showConfirDialog: true, lancamentoDeletar: lancamento });
+  };
+
+  delete = () => {
+    this.service
+      .deletar(this.state.lancamentoDeletar.id)
+      .then((response) => {
+        const lancamentos = this.state.lancamentos;
+        const index = lancamentos.indexOf(this.state.lancamentoDeletar);
+        lancamentos.splice(index, 1);
+        this.setState(lancamentos);
+        this.setState({
+          lancamentos: lancamentos,
+          showConfirDialog: false,
+          lancamentoDeletar: {},
+        });
+        menssages.mensagemSucesso("Lançamento deletado com Sucesso!");
+      })
+      .catch((error) => {
+        menssages.mensagemErro("Erro ao deletar Lançamento!");
+      });
+  };
 }
 
 export default ConsultaLancamento;

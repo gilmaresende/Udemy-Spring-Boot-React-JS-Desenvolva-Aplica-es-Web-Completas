@@ -3,7 +3,7 @@ import Card from "../components/card";
 import FormGroup from "../components/form-group";
 import { withRouter } from "react-router-dom";
 import UsuarioService from "../app/service/usuarioService";
-import LocalStorageService from "../app/service/localstorageservice";
+import LocalStorageService from "../app/service/localStorageService";
 import { mensagemErro } from "../components/toastr";
 class Login extends React.Component {
   state = {
