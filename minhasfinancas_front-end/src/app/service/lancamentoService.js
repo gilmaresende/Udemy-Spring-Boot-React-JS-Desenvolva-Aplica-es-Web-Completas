@@ -5,6 +5,11 @@ export default class LancamentoService extends ApiService {
     super("api/lancamentos");
   }
 
+  salvar(lancamento) {
+
+    return this.post("/", lancamento);
+  }
+
   deletar(id) {
     return this.delete(`/${id}`);
   }

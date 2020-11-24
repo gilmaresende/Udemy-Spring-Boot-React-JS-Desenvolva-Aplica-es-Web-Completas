@@ -49,6 +49,10 @@ class ConsultaLancamento extends React.Component {
       });
   };
 
+  novoLancamento = () => {
+    this.props.history.push("/cadastro-lancamento");
+  };
+
   render() {
     const meses = this.service.obterListaMeses();
     const tiposLancamentos = this.service.obterListaTipos();
@@ -117,7 +121,11 @@ class ConsultaLancamento extends React.Component {
               >
                 Buscar
               </button>
-              <button type="button" className="btn btn-danger">
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={this.novoLancamento}
+              >
                 Cadastrar
               </button>
             </div>
