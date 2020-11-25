@@ -6,8 +6,11 @@ export default class LancamentoService extends ApiService {
   }
 
   salvar(lancamento) {
-
     return this.post("/", lancamento);
+  }
+
+  atualizar(lancamento) {
+    return this.put(`/${lancamento.id}`, lancamento);
   }
 
   deletar(id) {
@@ -58,5 +61,9 @@ export default class LancamentoService extends ApiService {
       params = `${params}&descricao=${lancamentoFiltro.descricao}`;
     }
     return this.get(params);
+  }
+
+  obterPorId(id) {
+    return this.get(`/${id}`);
   }
 }

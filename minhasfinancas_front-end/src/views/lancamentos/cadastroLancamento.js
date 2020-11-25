@@ -16,6 +16,7 @@ class CadastroLancamento extends React.Component {
     ano: "",
     tipo: "",
     status: "",
+    usuario: null,
   };
   constructor() {
     super();
@@ -47,11 +48,58 @@ class CadastroLancamento extends React.Component {
       });
   };
 
+  atualizar = () => {
+    const {
+      descricao,
+      valor,
+      mes,
+      ano,
+      tipo,
+      usuario,
+      id,
+      status,
+    } = this.state;
+    const lancamento = {
+      descricao,
+      valor,
+      mes,
+      ano,
+      tipo,
+      usuario,
+      id,
+      status,
+    };
+
+    this.service
+      .atualizar(lancamento)
+      .then((response) => {
+        this.props.history.push("/consulta-lancamentos");
+        mensagemSucesso("Lancamento Atualizado com Sucesso!");
+      })
+      .catch((erro) => {
+        mensagemErro(erro.response.data);
+      });
+  };
+
   handleChange = (event) => {
     const value = event.target.value;
     const name = event.target.name;
     this.setState({ [name]: value });
   };
+
+  componentDidMount() {
+    const parans = this.props.match.params;
+    if (parans.id) {
+      this.service
+        .obterPorId(parans.id)
+        .then((response) => {
+          this.setState({ ...response.data });
+        })
+        .catch((erros) => {
+          mensagemErro(erros.response.data);
+        });
+    }
+  }
 
   render() {
     const listaTipo = this.service.obterListaTipos();
@@ -141,6 +189,9 @@ class CadastroLancamento extends React.Component {
           <div className="col-md-6">
             <button className="btn btn-success" onClick={this.submit}>
               Salvar
+            </button>
+            <button className="btn btn-primary" onClick={this.atualizar}>
+              Atualizar
             </button>
             <button className="btn btn-danger" onClick={this.cancelar}>
               Cancelar
