@@ -42,11 +42,27 @@ class ConsultaLancamento extends React.Component {
     this.service
       .consultar(lancamentoFiltro)
       .then((response) => {
+        if (response.data.length < 1) {
+          menssages.mensagemAlerta("Nenhum resultado encontrado!");
+        }
         this.setState({ lancamentos: response.data });
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  alterarStatus = (lancamento, status) => {
+    this.service.alterarStatus(lancamento.id, status).then((mensagem) => {
+      const lancamentos = this.state.lancamentos;
+      const index = lancamentos.indexOf(lancamento);
+      if (index !== -1) {
+        lancamento.status = status;
+        lancamento[index] = lancamento;
+        this.setState({ lancamentos });
+      }
+      menssages.mensagemSucesso("Status Atualizado com Sucesso!");
+    });
   };
 
   novoLancamento = () => {
@@ -119,14 +135,14 @@ class ConsultaLancamento extends React.Component {
                 className="btn btn-success"
                 onClick={this.buscar}
               >
-                Buscar
+                <i className="pi pi-search"></i> Buscar
               </button>
               <button
                 type="button"
                 className="btn btn-danger"
                 onClick={this.novoLancamento}
               >
-                Cadastrar
+                <i className="pi pi-plus"></i> Cadastrar
               </button>
             </div>
           </div>
@@ -139,6 +155,7 @@ class ConsultaLancamento extends React.Component {
                 lancamentos={this.state.lancamentos}
                 deleteAction={this.abrirConfirmacao}
                 editAction={this.editar}
+                alterarStatus={this.alterarStatus}
               ></LancamentoTable>
             </div>
           </div>
@@ -158,11 +175,6 @@ class ConsultaLancamento extends React.Component {
       </Card>
     );
   }
-
-  editar = (id) => {
-
-    this.props.history.push(`/cadastro-lancamento/${id}`);
-  };
 
   cancelarDelecao = () => {
     this.setState({ showConfirDialog: false, lancamentoDeletar: {} });
@@ -190,6 +202,10 @@ class ConsultaLancamento extends React.Component {
       .catch((error) => {
         menssages.mensagemErro("Erro ao deletar Lançamento!");
       });
+  };
+
+  editar = (id) => {
+    this.props.history.push(`/cadastro-lancamento/${id}`);
   };
 }
 

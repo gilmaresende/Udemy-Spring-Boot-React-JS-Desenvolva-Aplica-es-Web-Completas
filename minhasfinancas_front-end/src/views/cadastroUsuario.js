@@ -15,20 +15,17 @@ class CadastroUsuario extends React.Component {
   }
 
   salvar = () => {
-    const msgs = this.validar();
+    const { nome, email, senha, senhaRepetida } = this.state;
+    const usuario = { nome, email, senha, senhaRepetida };
 
-    if (msgs && msgs.length > 0) {
-      msgs.forEach((msg, index) => {
-        mensagemErro(msg);
-      });
+    try {
+      this.service.validar(usuario);
+    } catch (error) {
+      const msgs = error.mensagens;
+      msgs.forEach((msg) => mensagemErro(msg));
       return false;
     }
 
-    const usuario = {
-      nome: this.state.nome,
-      email: this.state.email,
-      senha: this.state.senha,
-    };
     this.service
       .salvar(usuario)
       .then((response) => {
@@ -43,26 +40,6 @@ class CadastroUsuario extends React.Component {
   cancelar = () => {
     this.props.history.push("/login");
   };
-
-  validar() {
-    const mensagens = [];
-
-    if (!this.state.nome) {
-      mensagens.push("Campo nome é obrigatorio!");
-    }
-    if (!this.state.email) {
-      mensagens.push("Campo email é obrigatorio!");
-    } else if (!this.state.email.match(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]/)) {
-      mensagens.push("Email informado não é valido!");
-    }
-    if (!this.state.senha || !this.state.senhaRepetida) {
-      mensagens.push("Informe a senha duas vezes!");
-    } else if (this.state.senha !== this.state.senhaRepetida) {
-      mensagens.push("Senhas não conhecidem!");
-    }
-
-    return mensagens;
-  }
 
   render() {
     return (
@@ -109,10 +86,10 @@ class CadastroUsuario extends React.Component {
                 />
               </FormGroup>
               <button className="btn btn-success" onClick={this.salvar}>
-                Salvar
+                <i className="pi - pi-save"></i> Salvar
               </button>
               <button className="btn btn-danger" onClick={this.cancelar}>
-                Cancelar
+                <i className="pi - pi-times"></i> Cancelar
               </button>
             </div>
           </div>

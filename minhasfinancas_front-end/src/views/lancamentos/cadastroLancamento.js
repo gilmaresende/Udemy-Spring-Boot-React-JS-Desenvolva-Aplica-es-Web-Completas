@@ -17,6 +17,7 @@ class CadastroLancamento extends React.Component {
     tipo: "",
     status: "",
     usuario: null,
+    atualizadando: false,
   };
   constructor() {
     super();
@@ -37,6 +38,15 @@ class CadastroLancamento extends React.Component {
       usuario: LocalStotaService.obterItem("_usuario_logado").id,
     };
 
+    try {
+      this.service.validar(lancamento);
+    } catch (erro) {
+      const erros = erro.mensagens;
+      erros.forEach((msg) => {
+        mensagemErro(msg);
+      });
+      return false;
+    }
     this.service
       .salvar(lancamento)
       .then((response) => {
@@ -93,7 +103,7 @@ class CadastroLancamento extends React.Component {
       this.service
         .obterPorId(parans.id)
         .then((response) => {
-          this.setState({ ...response.data });
+          this.setState({ ...response.data, atualizadando: true });
         })
         .catch((erros) => {
           mensagemErro(erros.response.data);
@@ -106,7 +116,11 @@ class CadastroLancamento extends React.Component {
     const listaMeses = this.service.obterListaMeses();
 
     return (
-      <Card title="Novo Lançamentos">
+      <Card
+        title={
+          this.state.atualizadando ? "Editando Lançamentos" : "Novo Lançamento"
+        }
+      >
         <div className="row">
           <div className="col-md-12">
             <FormGroup id="inputDescricao" label="Descricao: *">
@@ -187,14 +201,17 @@ class CadastroLancamento extends React.Component {
         </div>
         <div className="row">
           <div className="col-md-6">
-            <button className="btn btn-success" onClick={this.submit}>
-              Salvar
-            </button>
-            <button className="btn btn-primary" onClick={this.atualizar}>
-              Atualizar
-            </button>
+            {this.state.atualizadando ? (
+              <button className="btn btn-primary" onClick={this.atualizar}>
+                <i className="pi - pi-refresh"></i> Atualizar
+              </button>
+            ) : (
+              <button className="btn btn-success" onClick={this.submit}>
+              <i className="pi - pi-save"></i>  Salvar
+              </button>
+            )}
             <button className="btn btn-danger" onClick={this.cancelar}>
-              Cancelar
+            <i className="pi - pi-backward"></i>  Cancelar
             </button>
           </div>
         </div>
