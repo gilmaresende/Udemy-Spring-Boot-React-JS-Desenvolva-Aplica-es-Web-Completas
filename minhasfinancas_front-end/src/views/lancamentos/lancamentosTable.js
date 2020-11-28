@@ -15,7 +15,7 @@ export default (props) => {
             onClick={(e) => props.alterarStatus(lancamento, "EFETIVADO")}
             type="button"
             title="Efetivar"
-            disabled={lancamento.status !== "CANCELADO"}
+            disabled={lancamento.status === "EFETIVADO"}
           >
             <i className="pi pi-check p-mr-2"></i>
           </button>
@@ -24,7 +24,7 @@ export default (props) => {
             onClick={(e) => props.alterarStatus(lancamento, "CANCELADO")}
             type="button"
             title="Cancelar"
-            disabled={lancamento.status !== "EFETIVADO"}
+            disabled={lancamento.status === "CANCELADO"}
           >
             <i className="pi pi-ban"></i>
           </button>

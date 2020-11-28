@@ -99,8 +99,8 @@ public class LancamentoServiceImpl implements LancamentoService {
 
     @Override
     public BigDecimal consultarSaldoPorUsuario(Long id) {
-        BigDecimal receitas = repository.consultarSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.RECEITA);
-        BigDecimal despesas = repository.consultarSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.DESPESA);
+        BigDecimal receitas = repository.consultarSaldoPorUsuarioTipoLancamentoEStatus(id, TipoLancamento.RECEITA, StatusLancamento.EFETIVADO);
+        BigDecimal despesas = repository.consultarSaldoPorUsuarioTipoLancamentoEStatus(id, TipoLancamento.DESPESA, StatusLancamento.EFETIVADO);
         if (receitas == null) {
             receitas = BigDecimal.ZERO;
         }

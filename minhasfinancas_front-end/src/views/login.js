@@ -30,6 +30,7 @@ class Login extends React.Component {
         this.props.history.push("/home");
       })
       .catch((erro) => {
+        console.log(erro.response)
         mensagemErro(erro.response.data);
       });
   };
@@ -76,7 +77,8 @@ class Login extends React.Component {
                         ></input>
                       </FormGroup>
                       <button className="btn btn-success" onClick={this.entrar}>
-                        <i className="pi - pi-sign-in"></i> Entrar
+                        <i className="pi - pi-sign-in"></i> 
+                        Entrar
                       </button>
                       <button
                         className="btn btn-danger"
