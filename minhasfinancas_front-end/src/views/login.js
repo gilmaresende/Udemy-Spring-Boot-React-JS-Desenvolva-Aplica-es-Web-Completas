@@ -11,6 +11,15 @@ class Login extends React.Component {
     senha: "",
   };
 
+  async componentDidMount() {
+    await this.context.getSessao();
+    const usuarioLogado = this.context.usuarioAutenticado;
+
+    if (usuarioLogado) {
+      this.props.history.push("/home");
+    }
+  }
+
   constructor() {
     super();
     this.service = new UsuarioService();

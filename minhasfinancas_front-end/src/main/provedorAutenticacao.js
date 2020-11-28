@@ -28,6 +28,8 @@ class PrevedorAutenticacao extends React.Component {
 
   encerrarSessao = () => {
     AuthService.removerUsuarioAutenticado();
+    this.setState({ isAutenticado: false, usuarioAutenticado: null });
+    console.log(this.state);
   };
   render() {
     const contexto = {

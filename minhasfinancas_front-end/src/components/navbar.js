@@ -1,19 +1,12 @@
 import React from "react";
 import NavbarItem from "./navbarItem";
-import AuthService from "../app/service/authService";
+import { AuthConsumer } from "../main/provedorAutenticacao";
 
-const isUsuarioAutenticado = () => {
-  return AuthService.isUsuarioLogado();
-};
-
-const removeUser = () => {
-  AuthService.removerUsuarioAutenticado();
-};
-function Navbar() {
+function Navbar(props) {
   return (
     <div className="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
       <div className="container">
-        <a href="https://bootswatch.com/" className="navbar-brand">
+        <a href="#/home" className="navbar-brand">
           Minhas Finanças
         </a>
         <button
@@ -30,23 +23,23 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarResponsive">
           <ul className="navbar-nav">
             <NavbarItem
-              render={isUsuarioAutenticado()}
+              render={props.isUsuarioAtenticado}
               href="#/home"
               label="Home"
             />
             <NavbarItem
-              render={isUsuarioAutenticado()}
+              render={props.isUsuarioAtenticado}
               href="#/cadastro-usuario"
               label="Usuários"
             />
             <NavbarItem
-              render={isUsuarioAutenticado()}
+              render={props.isUsuarioAtenticado}
               href="#/consulta-lancamentos"
               label="Lançamentos"
             />
             <NavbarItem
-              onClick={removeUser}
-              render={isUsuarioAutenticado()}
+              onClick={props.deslogar}
+              render={props.isUsuarioAtenticado}
               href="#/login"
               label="Sair"
             />
@@ -57,4 +50,13 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default () => (
+  <AuthConsumer>
+    {(context) => (
+      <Navbar
+        isUsuarioAtenticado={context.isAutenticado}
+        deslogar={context.encerrarSessao}
+      />
+    )}
+  </AuthConsumer>
+);
