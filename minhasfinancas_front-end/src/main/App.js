@@ -12,16 +12,17 @@ import "toastr/build/toastr.css";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
+import Provedor from "./provedorAutenticacao";
 
 class App extends React.Component {
   render() {
     return (
-      <div>
+      <Provedor>
         <Navbar></Navbar>
         <div className="container">
           <Rotas />
         </div>
-      </div>
+      </Provedor>
     );
   }
 }
