@@ -1,0 +1,10 @@
+﻿*.class
+/.metadata/
+SECAO26/workshopmongo2/.metadata
+SECAO22/JFX/.metadata
+SECAO23/WORKSHOP-JAVAFX-JDBC/.settings
+SECAO21/jdbc1/.settings
+SECAO21/jdbc2/.settings
+*/.settings
+*settings
+SECAO23/tmp
