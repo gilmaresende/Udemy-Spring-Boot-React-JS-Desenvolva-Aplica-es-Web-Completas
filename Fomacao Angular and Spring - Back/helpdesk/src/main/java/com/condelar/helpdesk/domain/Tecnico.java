@@ -32,7 +32,7 @@ public class Tecnico extends Pessoa {
 		this.cpf = ob.getCpf();
 		this.email = ob.getEmail();
 		this.senha = ob.getSenha();
-		this.perfis = ob.getPerfis().stream().map(m -> m.getCodigo()).collect(Collectors.toSet());
+		this.perfis.addAll(ob.getPerfis().stream().map(m -> m.getCodigo()).collect(Collectors.toSet()));
 		this.dataCriacao = ob.getDataCriacao();
 	}
 
