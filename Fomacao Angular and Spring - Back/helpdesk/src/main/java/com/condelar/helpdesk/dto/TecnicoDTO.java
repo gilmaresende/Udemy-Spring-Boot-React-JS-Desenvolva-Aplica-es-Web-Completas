@@ -28,6 +28,7 @@ public class TecnicoDTO implements Serializable {
 
 	public TecnicoDTO() {
 		super();
+		addPerfis(Perfil.CLIENTE);
 	}
 
 	public TecnicoDTO(Tecnico ob) {
@@ -85,8 +86,8 @@ public class TecnicoDTO implements Serializable {
 		return perfis;
 	}
 
-	public void setPerfis(Set<Perfil> perfis) {
-		this.perfis = perfis;
+	public void addPerfis(Perfil perfi) {
+		this.perfis.add(perfi);
 	}
 
 	public LocalDate getDataCriacao() {
