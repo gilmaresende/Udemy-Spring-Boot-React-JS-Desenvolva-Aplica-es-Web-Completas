@@ -5,12 +5,13 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import com.condelar.helpdesk.domain.Tecnico;
 import com.condelar.helpdesk.domain.enuns.Perfil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 public class TecnicoDTO implements Serializable {
 
@@ -21,6 +22,7 @@ public class TecnicoDTO implements Serializable {
 	@NotEmpty(message = "O campo Nome é requirido!")
 	protected String nome;
 
+	@CPF
 	@NotEmpty(message = "O campo CPF é requirido!")
 	protected String cpf;
 

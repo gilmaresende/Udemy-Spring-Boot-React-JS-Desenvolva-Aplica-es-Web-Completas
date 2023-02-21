@@ -14,6 +14,8 @@ import com.condelar.helpdesk.repositorys.TecnicoRepository;
 import com.condelar.helpdesk.service.exception.DataIntegrityViolationException;
 import com.condelar.helpdesk.service.exception.ObjectNotFoundException;
 
+import jakarta.validation.Valid;
+
 @Service
 public class TecnicoService {
 
@@ -51,6 +53,14 @@ public class TecnicoService {
 			throw new DataIntegrityViolationException("Email já cadastro no sistema!");
 		}
 
+	}
+
+	public Tecnico update(Integer id, @Valid TecnicoDTO dtoNew) {
+		dtoNew.setId(id);
+		Tecnico ob = findById(id);
+		validaPorCpfEEmail(dtoNew);
+		ob = new Tecnico(dtoNew);
+		return repository.save(ob);
 	}
 
 }
