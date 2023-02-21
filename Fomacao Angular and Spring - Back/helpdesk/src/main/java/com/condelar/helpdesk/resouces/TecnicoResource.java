@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,18 +41,24 @@ public class TecnicoResource {
 		List<TecnicoDTO> listDTO = list.stream().map(m -> new TecnicoDTO(m)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody TecnicoDTO objDTO){
+	public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody TecnicoDTO objDTO) {
 		Tecnico newOb = service.create(objDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newOb.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
-	
-	@PutMapping(value="/{id}")
-	public ResponseEntity<TecnicoDTO> update(@PathVariable Integer id,@Valid @RequestBody TecnicoDTO dtoNew){
+
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<TecnicoDTO> update(@PathVariable Integer id, @Valid @RequestBody TecnicoDTO dtoNew) {
 		Tecnico obj = service.update(id, dtoNew);
 		return ResponseEntity.ok().body(new TecnicoDTO(obj));
+	}
+
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<TecnicoDTO> delete(@PathVariable Integer id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }
