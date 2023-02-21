@@ -9,16 +9,25 @@ import com.condelar.helpdesk.domain.Tecnico;
 import com.condelar.helpdesk.domain.enuns.Perfil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public class TecnicoDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	protected Integer id;
+
+	@NotEmpty(message = "O campo Nome é requirido!")
 	protected String nome;
 
+	@NotEmpty(message = "O campo CPF é requirido!")
 	protected String cpf;
 
+	@NotEmpty(message = "O campo e-mail é requirido!")
 	protected String email;
+	
+	@NotEmpty(message = "O campo senha é requirido!")
 	protected String senha;
 
 	protected Set<Perfil> perfis = new HashSet<>();
