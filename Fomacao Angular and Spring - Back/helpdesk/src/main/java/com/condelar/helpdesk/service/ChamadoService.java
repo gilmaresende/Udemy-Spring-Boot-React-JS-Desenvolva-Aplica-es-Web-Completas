@@ -1,5 +1,6 @@
 package com.condelar.helpdesk.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,13 @@ public class ChamadoService {
 		return repository.save(newChamado(dto));
 	}
 
+	public Chamado update(Integer id, @Valid ChamadoDTO dto) {
+		dto.setId(id);
+		Chamado ob = findById(id);
+		ob = newChamado(dto);
+		return repository.save(ob);
+	}
+
 	private Chamado newChamado(ChamadoDTO dto) {
 		Tecnico tecnico = tecnicoService.findById(dto.getTecnico());
 		Cliente cliente = clienteService.findById(dto.getCliente());
@@ -49,6 +57,11 @@ public class ChamadoService {
 		Chamado ob = new Chamado();
 		if (dto.getId() != null) {
 			ob.setId(dto.getId());
+		}
+		
+
+		if (dto.getStatus().equals(2)) {
+			ob.setDataFechamento(LocalDate.now());
 		}
 
 		ob.setTecnico(tecnico);
@@ -59,4 +72,5 @@ public class ChamadoService {
 		ob.setObservacoes(dto.getObservacoes());
 		return ob;
 	}
+
 }
