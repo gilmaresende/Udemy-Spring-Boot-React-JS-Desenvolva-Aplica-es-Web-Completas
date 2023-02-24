@@ -13,7 +13,7 @@ import com.desafio.vendas.services.VendaService;
 @RestController
 @RequestMapping("/vendas")
 public class VendasController {
-	
+
 	@Autowired
 	private VendaService service;
 
@@ -21,7 +21,7 @@ public class VendasController {
 	public ModelAndView formDirect(@RequestParam("file") MultipartFile file) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			double valorCalculado = 
+			double valorCalculado =
 			service.processo(file);
 			mv.setViewName("receita");
 			mv.addObject("receitaBruta", valorCalculado);

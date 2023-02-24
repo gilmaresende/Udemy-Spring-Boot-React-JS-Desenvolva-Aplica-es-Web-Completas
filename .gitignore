@@ -1,1 +1,4 @@
 ﻿Upload File With Spring Boot/vendas/.mvn
+Upload File With Spring Boot/vendas/bin/.mvn
+*.class
+Upload File With Spring Boot/vendas/bin

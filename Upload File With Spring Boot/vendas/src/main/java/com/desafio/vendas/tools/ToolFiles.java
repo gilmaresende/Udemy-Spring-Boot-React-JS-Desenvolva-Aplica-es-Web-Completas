@@ -2,27 +2,25 @@ package com.desafio.vendas.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
 public class ToolFiles {
-	
+
 	public static List<String> readTxt(MultipartFile file) throws Exception {
 
 		File fileTmp = getFileTmp(file, "txt");
 
-		List<String> linhas = new ArrayList<String>();
+		List<String> linhas = new ArrayList<>();
 		if (fileTmp != null) {
 			try (BufferedReader br = new BufferedReader(new FileReader(fileTmp.getAbsolutePath()))) {
 				String lineTxt = br.readLine();
-				Integer nLinha = 0;
+				int nLinha = 0;
 				boolean firstline = true;
 				while (lineTxt != null) {
 					if (firstline) {
@@ -32,7 +30,7 @@ public class ToolFiles {
 						linhas.add(lineTxt);
 					}
 					lineTxt = br.readLine();
-					
+
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -44,7 +42,7 @@ public class ToolFiles {
 		}
 		return linhas;
 	}
-	
+
 	public static File getFileTmp(MultipartFile file, String extensao) throws Exception {
 		File fileTmp = null;
 		extensao = extensao.replace(".", "");
@@ -68,7 +66,7 @@ public class ToolFiles {
 
 /*public class LerArquivo {
 	public static String Read(String Caminho) throws ParseException {
-		
+
 		String dados = "";
 		try {
 			FileReader arq = new FileReader(Caminho);
@@ -84,13 +82,13 @@ public class ToolFiles {
 					String cliente_nome = field[3];
 					String cliente_cpf_cnpj = field[4];
 					String cliente_endereco = field[5];
-					
+
 					dados += linha;
 					linha = lerArq.readLine();
 					return dados;
 				}
-				
-				
+
+
 			} catch (IOException ex){
 				dados = "Erro: Não foi possível ler o arquivo.";
 			}
@@ -102,8 +100,8 @@ public class ToolFiles {
 		else {
 			return dados;
 		}
-		
-		
+
+
 	}
 
 }*/

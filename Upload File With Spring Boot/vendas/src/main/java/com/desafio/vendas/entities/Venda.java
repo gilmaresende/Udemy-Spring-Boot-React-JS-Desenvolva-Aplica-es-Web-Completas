@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Venda {
-	
+
 	@Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
