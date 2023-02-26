@@ -33,15 +33,15 @@ public class DBService {
 
 	public void instanciaDB() {
 
-		Tecnico t1 = new Tecnico(null, "Gilmar Fabiano", "61324755164", " gfresende@mail.com",
+		Tecnico t1 = new Tecnico(null, "Gilmar Fabiano", "61324755164", "gfresende@mail.com",
 				encoder.encode("s1235879"));
 		t1.addPerfis(Perfil.ADMIN);
-		Tecnico t2 = new Tecnico(null, "Geraldo Henrique", "54755733529", " ghmorais@mail.com",
+		Tecnico t2 = new Tecnico(null, "Geraldo Henrique", "54755733529", "ghmorais@mail.com",
 				encoder.encode("df7591"));
 		t2.addPerfis(Perfil.ADMIN);
-		Tecnico t3 = new Tecnico(null, "Italo Medice", "52189636310", " itmedice.com", encoder.encode("gdfuh47"));
+		Tecnico t3 = new Tecnico(null, "Italo Medice", "52189636310", "itmedice.com", encoder.encode("gdfuh47"));
 		t3.addPerfis(Perfil.ADMIN);
-		Tecnico t4 = new Tecnico(null, "Jadson Moura", "44426880602", " jamoura.com", encoder.encode("fdfg45"));
+		Tecnico t4 = new Tecnico(null, "Jadson Moura", "44426880602", "jamoura.com", encoder.encode("fdfg45"));
 		t4.addPerfis(Perfil.ADMIN);
 
 		Cliente c1 = new Cliente(null, "Tadeu Borges", "87730613107", "tadeu.borges@mail.com",

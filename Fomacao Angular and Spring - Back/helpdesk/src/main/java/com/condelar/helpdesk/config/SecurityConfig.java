@@ -13,58 +13,71 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.condelar.helpdesk.security.JWTAuthenticationFilter;
+import com.condelar.helpdesk.security.JWTUtil;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	private static final String[] PUBLIC_MATCHERS = { "/tecnicos/**", "/h2/**" };
+	private static final String[] PUBLIC_MATCHERS = { "/tecnicos/**", "/h2/**", "/login/**" };
 
 	@Autowired
 	private Environment env;
 
+	@Autowired
+	private JWTUtil jwtUtil;
+	
+/*	@Autowired
+	private UserDetailsService detailsService;
+*/
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
 		return authConfiguration.getAuthenticationManager();
 
 	}
-
-	@Bean
-	public PasswordEncoder passWordEncoder() {
-		return new BCryptPasswordEncoder();
+	
+	/*@Bean
+	protected void configure(AuthenticationManagerBuilder authConfiguration) throws Exception {
+		authConfiguration.userDetailsService(detailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
 
+	 * @Bean public PasswordEncoder passWordEncoder() { return new
+	 * BCryptPasswordEncoder(); }
+	 */
+
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationConfiguration authConfiguration)
+			throws Exception {
 
 		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
 			http.headers().frameOptions().disable();
 		}
 		http.cors();
+		http.addFilter(new JWTAuthenticationFilter(authConfiguration.getAuthenticationManager(), jwtUtil));
 		return http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeHttpRequests().
-				requestMatchers(HttpMethod.GET,"/h2").permitAll().
-				requestMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated().and().build();
+				.authorizeHttpRequests().requestMatchers(HttpMethod.GET, "/h2").permitAll()
+				.requestMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated().and().build();
 	}
-	
+
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-	/*
-	 * @Bean public CorsConfigurationSource corsConfigurationSource() {
-	 * CorsConfiguration configuration = new
-	 * CorsConfiguration().applyPermitDefaultValues();
-	 * configuration.setAllowedMethods(Arrays.asList("POST","GET","PUT","DELETE",
-	 * "OPTIONS")); final UrlBasedCorsConfigurationSource source = new
-	 * UrlBasedCorsConfigurationSource();
-	 * source.registerCorsConfiguration("/**",configuration); return
-	 * (CorsConfigurationSource) source;
-	 * 
-	 * }
-	 */
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+
+	}
 
 }
