@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,24 +31,11 @@ public class SecurityConfig {
 
 	@Autowired
 	private JWTUtil jwtUtil;
-	
-/*	@Autowired
-	private UserDetailsService detailsService;
-*/
+
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
 		return authConfiguration.getAuthenticationManager();
-
 	}
-	
-	/*@Bean
-	protected void configure(AuthenticationManagerBuilder authConfiguration) throws Exception {
-		authConfiguration.userDetailsService(detailsService).passwordEncoder(bCryptPasswordEncoder());
-	}
-
-	 * @Bean public PasswordEncoder passWordEncoder() { return new
-	 * BCryptPasswordEncoder(); }
-	 */
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationConfiguration authConfiguration)
@@ -61,7 +47,7 @@ public class SecurityConfig {
 		http.cors();
 		http.addFilter(new JWTAuthenticationFilter(authConfiguration.getAuthenticationManager(), jwtUtil));
 		return http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeHttpRequests().requestMatchers(HttpMethod.GET, "/h2").permitAll()
+				.authorizeHttpRequests()
 				.requestMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated().and().build();
 	}
 
@@ -77,7 +63,5 @@ public class SecurityConfig {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
-
 	}
-
 }
