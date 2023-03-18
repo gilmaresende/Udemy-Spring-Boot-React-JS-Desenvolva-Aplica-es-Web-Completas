@@ -20,6 +20,6 @@ public class DevConfig {
 
 	@Bean
 	void instanciaDB() {
-		this.dbService.instanciaDB();
+		//this.dbService.instanciaDB();
 	}
 }

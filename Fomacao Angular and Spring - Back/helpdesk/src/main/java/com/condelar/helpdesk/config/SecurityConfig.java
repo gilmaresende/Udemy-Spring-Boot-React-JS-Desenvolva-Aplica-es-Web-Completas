@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -18,19 +19,23 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.condelar.helpdesk.security.JWTAuthenticationFilter;
+import com.condelar.helpdesk.security.JWTAuthorizationFilter;
 import com.condelar.helpdesk.security.JWTUtil;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	private static final String[] PUBLIC_MATCHERS = { "/tecnicos/**", "/h2/**", "/login/**" };
+	private static final String[] PUBLIC_MATCHERS = { "/**", "/h2/**", "/login/**" };
 
 	@Autowired
 	private Environment env;
 
 	@Autowired
 	private JWTUtil jwtUtil;
+
+	@Autowired
+	private UserDetailsService detailsService;
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
@@ -46,9 +51,12 @@ public class SecurityConfig {
 		}
 		http.cors();
 		http.addFilter(new JWTAuthenticationFilter(authConfiguration.getAuthenticationManager(), jwtUtil));
+		http.addFilter(
+				new JWTAuthorizationFilter(authConfiguration.getAuthenticationManager(), jwtUtil, detailsService));
+
 		return http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeHttpRequests()
-				.requestMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated().and().build();
+				.authorizeHttpRequests().requestMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated().and()
+				.build();
 	}
 
 	@Bean
