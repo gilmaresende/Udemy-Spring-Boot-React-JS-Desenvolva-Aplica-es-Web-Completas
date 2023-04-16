@@ -1,5 +1,6 @@
 package com.condelar.securyti.entity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Usuario implements UserDetails{
+public class Usuario implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
@@ -27,13 +28,17 @@ public class Usuario implements UserDetails{
 
 	private String password;
 
+	private String role;
+
 	public Usuario() {
 		super();
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+		List<SimpleGrantedAuthority> res = new ArrayList<>();
+		res.add(new SimpleGrantedAuthority("ADMIN"));
+		return res;
 	}
 
 	@Override
@@ -85,5 +90,13 @@ public class Usuario implements UserDetails{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 }
