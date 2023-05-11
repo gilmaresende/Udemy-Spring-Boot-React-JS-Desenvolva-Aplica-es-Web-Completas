@@ -15,19 +15,16 @@ public class HomeController {
 	}
 	
 	@GetMapping("/home1")
-	@RolesAllowed(value = "USER")
 	public String home1() {
 		return "USER";
 	}
 	
 	@GetMapping("/home2")
-	@RolesAllowed("ADMIN")
 	public String home2() {
 		return "ADMIN";
 	}
 	
 	@GetMapping("/homev")
-	@RolesAllowed(value = "VISITI")
 	public String home3() {
 		return "VISITANTE";
 	}
