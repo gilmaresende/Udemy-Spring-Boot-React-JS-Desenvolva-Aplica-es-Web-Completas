@@ -1,10 +1,14 @@
 package com.condelar.cursomc.domain;
 
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Entity
 public class ItemPedido implements Serializable {
 
+    @EmbeddedId
     private ItemPedidoPK id = new ItemPedidoPK();
 
     private Double desconto;
