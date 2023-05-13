@@ -4,6 +4,7 @@ import com.condelar.cursomc.domain.Categoria;
 import com.condelar.cursomc.dto.CategoriaDTO;
 import com.condelar.cursomc.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -50,6 +51,21 @@ public class CategoriaResource {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<CategoriaDTO>> findAll() {
         List<CategoriaDTO> list = service.findAll().stream().map(m -> new CategoriaDTO(m)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(list);
+    }
+
+    ///page?linesPerPage=5&page=0&direction=DESC
+    @RequestMapping(value = "page", method = RequestMethod.GET)
+    public ResponseEntity<Page<CategoriaDTO>> findPage(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+            @RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
+            @RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+        Page<CategoriaDTO> list = service.findPage(
+                page,
+                linesPerPage,
+                orderBy,
+                direction).map(m -> new CategoriaDTO(m));
         return ResponseEntity.ok().body(list);
     }
 }
