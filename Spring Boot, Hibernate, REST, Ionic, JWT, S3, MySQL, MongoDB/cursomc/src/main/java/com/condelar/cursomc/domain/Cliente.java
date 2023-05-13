@@ -1,8 +1,7 @@
 package com.condelar.cursomc.domain;
 
 import com.condelar.cursomc.domain.enums.TipoCliente;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,7 +22,6 @@ public class Cliente implements Serializable {
 
     private Integer tipoCliente;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> enderecos = new ArrayList<>();
 
@@ -33,7 +31,7 @@ public class Cliente implements Serializable {
 
 
     @OneToMany(mappedBy = "cliente")
-    @JsonBackReference
+    @JsonIgnore
     private List<Pedido> pedidos = new ArrayList<>();
 
     public Cliente() {
