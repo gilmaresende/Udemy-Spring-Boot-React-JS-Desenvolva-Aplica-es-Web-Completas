@@ -82,9 +82,7 @@ public class Cliente implements Serializable {
     }
 
     public void setTipoCliente(TipoCliente tipoCliente) {
-        if (tipoCliente == null)
-            this.tipoCliente = null;
-        else
+        if (tipoCliente != null)
             this.tipoCliente = tipoCliente.getCod();
     }
 
