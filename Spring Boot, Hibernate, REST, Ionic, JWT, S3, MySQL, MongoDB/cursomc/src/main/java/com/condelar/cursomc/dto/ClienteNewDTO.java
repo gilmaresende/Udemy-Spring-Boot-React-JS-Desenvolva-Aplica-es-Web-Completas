@@ -1,28 +1,44 @@
 package com.condelar.cursomc.dto;
 
+import com.condelar.cursomc.services.validation.ClienteInsert;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
+@ClienteInsert
 public class ClienteNewDTO implements Serializable {
 
+    @NotEmpty(message = "O nome não pode esta em Branco")
+    @Length(min = 5, max = 120, message = "O Tamenho deve ser entre 5 e 120 caracteres")
     private String nome;
 
+    @NotEmpty(message = "O nome não pode esta em Branco")
+    @Email(message = "e-mail invalido")
     private String email;
 
+    @NotEmpty(message = "O CPF/CNPJ não pode esta em Branco")
     private String cpfOuCnpj;
 
     private Integer tipoCliente;
 
-
+    @NotEmpty(message = "O Logadouro não pode esta em Branco")
     private String logadouro;
 
+    @NotEmpty(message = "O Número não pode esta em Branco")
     private String numero;
 
+    @NotEmpty(message = "O Complemento não pode esta em Branco")
     private String complemento;
 
+    @NotEmpty(message = "O Bairro não pode esta em Branco")
     private String bairro;
 
+    @NotEmpty(message = "O CEP não pode esta em Branco")
     private String cep;
 
+    @NotEmpty(message = "O Telefone 1 não pode esta em Branco")
     private String telefone1;
 
     private String telefone2;
