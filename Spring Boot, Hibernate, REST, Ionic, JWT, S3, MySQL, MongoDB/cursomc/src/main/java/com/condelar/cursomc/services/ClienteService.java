@@ -1,10 +1,14 @@
 package com.condelar.cursomc.services;
 
+import com.condelar.cursomc.domain.Cidade;
 import com.condelar.cursomc.domain.Cliente;
-import com.condelar.cursomc.domain.Cliente;
+import com.condelar.cursomc.domain.Endereco;
 import com.condelar.cursomc.domain.enums.TipoCliente;
 import com.condelar.cursomc.dto.ClienteDTO;
+import com.condelar.cursomc.dto.ClienteNewDTO;
+import com.condelar.cursomc.repositories.CidadeRepository;
 import com.condelar.cursomc.repositories.ClienteRepository;
+import com.condelar.cursomc.repositories.EnderecoRepository;
 import com.condelar.cursomc.services.exeption.DataIntegrityException;
 import com.condelar.cursomc.services.exeption.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +27,9 @@ public class ClienteService {
 
     @Autowired
     ClienteRepository repo;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
     public Cliente find(Integer id) {
         Optional<Cliente> op = repo.findById(id);
@@ -62,5 +70,35 @@ public class ClienteService {
     private void updateData(Cliente obNew, Cliente obOld) {
         obNew.setNome(obOld.getNome());
         obNew.setEmail(obOld.getEmail());
+    }
+
+    @Transactional
+    public Cliente insert(Cliente obj) {
+        obj.setId(null);
+        obj = repo.save(obj);
+        enderecoRepository.saveAll(obj.getEnderecos());
+        return repo.save(obj);
+    }
+
+    public Cliente fromDTO(ClienteNewDTO dto) {
+        Cliente ob = new Cliente();
+        ob.setNome(dto.getNome());
+        ob.setEmail(dto.getEmail());
+        ob.setCpfOuCnpj(dto.getCpfOuCnpj());
+        ob.setTipoCliente(TipoCliente.toEnum(dto.getTipoCliente()));
+        Cidade cid = new Cidade(dto.getCidadeId(), null, null);
+        Endereco end = new Endereco(null, dto.getLogadouro(), dto.getNumero(), dto.getComplemento(), dto.getBairro(), dto.getCep(), cid, ob);
+        ob.getEnderecos().add(end);
+
+        ob.getTelefones().add(dto.getTelefone1());
+        if (dto.getTelefone2() != null) {
+            ob.getTelefones().add(dto.getTelefone2());
+        }
+        if (dto.getTelefone3() != null) {
+            ob.getTelefones().add(dto.getTelefone3());
+        }
+
+        return ob;
+
     }
 }

@@ -1,14 +1,20 @@
 package com.condelar.cursomc.resources;
 
+import com.condelar.cursomc.domain.Categoria;
 import com.condelar.cursomc.domain.Cliente;
+import com.condelar.cursomc.dto.CategoriaDTO;
 import com.condelar.cursomc.dto.ClienteDTO;
+import com.condelar.cursomc.dto.ClienteNewDTO;
 import com.condelar.cursomc.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +31,14 @@ public class ClienteResource {
         return ResponseEntity.ok().body(ob);
     }
 
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO dto) {
+        Cliente ob = service.fromDTO(dto);
+        ob = service.insert(ob);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(ob.getId()).toUri();
+        return ResponseEntity.created(uri).build();
+    }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Void> update(@PathVariable Integer id,
