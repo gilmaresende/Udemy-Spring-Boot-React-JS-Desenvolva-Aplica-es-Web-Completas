@@ -18,7 +18,7 @@ public class Cliente implements Serializable {
 
     private String email;
 
-    private String cpfPuCnpj;
+    private String cpfOuCnpj;
 
     private Integer tipoCliente;
 
@@ -37,11 +37,11 @@ public class Cliente implements Serializable {
     public Cliente() {
     }
 
-    public Cliente(Integer id, String nome, String email, String cpfPuCnpj, TipoCliente tipoCliente) {
+    public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipoCliente) {
         this.id = id;
         this.nome = nome;
         this.email = email;
-        this.cpfPuCnpj = cpfPuCnpj;
+        this.cpfOuCnpj = cpfOuCnpj;
         setTipoCliente(tipoCliente);
     }
 
@@ -69,12 +69,12 @@ public class Cliente implements Serializable {
         this.email = email;
     }
 
-    public String getCpfPuCnpj() {
-        return cpfPuCnpj;
+    public String getCpfOuCnpj() {
+        return cpfOuCnpj;
     }
 
-    public void setCpfPuCnpj(String cpfPuCnpj) {
-        this.cpfPuCnpj = cpfPuCnpj;
+    public void setCpfOuCnpj(String cpfOuCnpj) {
+        this.cpfOuCnpj = cpfOuCnpj;
     }
 
     public TipoCliente getTipoCliente() {
@@ -82,7 +82,10 @@ public class Cliente implements Serializable {
     }
 
     public void setTipoCliente(TipoCliente tipoCliente) {
-        this.tipoCliente = tipoCliente.getCod();
+        if (tipoCliente == null)
+            this.tipoCliente = null;
+        else
+            this.tipoCliente = tipoCliente.getCod();
     }
 
     public List<Endereco> getEnderecos() {
