@@ -1,6 +1,7 @@
 package com.condelar.cursomc.services;
 
 import com.condelar.cursomc.domain.Categoria;
+import com.condelar.cursomc.dto.CategoriaDTO;
 import com.condelar.cursomc.repositories.CategoriaRepository;
 import com.condelar.cursomc.services.exeption.DataIntegrityException;
 import com.condelar.cursomc.services.exeption.ObjectNotFoundException;
@@ -51,5 +52,10 @@ public class CategoriaService {
     public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         return repo.findAll(pageRequest);
+    }
+
+    public Categoria fromDTO(CategoriaDTO dto) {
+        Categoria ob = new Categoria(dto.getId(), dto.getNome());
+        return ob;
     }
 }
