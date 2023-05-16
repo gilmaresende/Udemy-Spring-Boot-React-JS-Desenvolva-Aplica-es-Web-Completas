@@ -32,7 +32,14 @@ public class ProdutoResource {
             @RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
             @RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
             @RequestParam(value = "direction", defaultValue = "ASC") String direction) {
-        Page<ProdutoDTO> list = service.search(nome,
+//        Page<ProdutoDTO> list = service.search(URL.decodeParam(nome),
+//                URL.decodeIntList(categorias),
+//                page,
+//                linesPerPage,
+//                orderBy,
+//                direction).map(m -> new ProdutoDTO(m));
+
+        Page<ProdutoDTO> list = service.search(URL.decodeParam(nome),
                 URL.decodeIntList(categorias),
                 page,
                 linesPerPage,
