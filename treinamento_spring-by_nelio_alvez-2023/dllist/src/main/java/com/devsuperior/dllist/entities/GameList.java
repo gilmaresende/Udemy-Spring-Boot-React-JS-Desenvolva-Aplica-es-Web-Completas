@@ -16,15 +16,15 @@ public class GameList {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String title;
+	private String name;
 
 	public GameList() {
 	}
 
-	public GameList(Long id, String title) {
+	public GameList(Long id, String name) {
 		super();
 		this.id = id;
-		this.title = title;
+		this.name = name;
 	}
 
 	public Long getId() {
@@ -35,12 +35,12 @@ public class GameList {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
