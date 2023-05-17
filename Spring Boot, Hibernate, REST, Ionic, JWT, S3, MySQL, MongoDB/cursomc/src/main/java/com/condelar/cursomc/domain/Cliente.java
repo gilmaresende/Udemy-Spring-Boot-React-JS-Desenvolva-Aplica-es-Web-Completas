@@ -103,10 +103,6 @@ public class Cliente implements Serializable {
         this.telefones = telefones;
     }
 
-    public void setTipoCliente(Integer tipoCliente) {
-        this.tipoCliente = tipoCliente;
-    }
-
     public List<Pedido> getPedidos() {
         return pedidos;
     }
