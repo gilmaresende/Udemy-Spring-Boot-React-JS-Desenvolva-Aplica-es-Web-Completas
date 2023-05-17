@@ -27,7 +27,7 @@ public class GameMinDTO {
 		super();
 		this.id = entity.getId();
 		this.title = entity.getTitle();
-		this.year = entity.getYear();
+		this.year = entity.getGamerYear();
 		this.imgUrl = entity.getImgUrl();
 		this.shortDescription = entity.getShortDescription();
 	}
