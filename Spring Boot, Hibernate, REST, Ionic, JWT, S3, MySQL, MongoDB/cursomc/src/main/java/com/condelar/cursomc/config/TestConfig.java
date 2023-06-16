@@ -2,6 +2,8 @@ package com.condelar.cursomc.config;
 
 import java.text.ParseException;
 
+import com.condelar.cursomc.services.EmailService;
+import com.condelar.cursomc.services.MockEmailservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,4 +24,8 @@ public class TestConfig {
 		return true;
 	}
 
+	@Bean
+	public EmailService emailService(){
+		return new MockEmailservice();
+	}
 }
