@@ -23,6 +23,9 @@ public class ClienteNewDTO implements Serializable {
 
     private Integer tipoCliente;
 
+    @NotEmpty(message = "Preenchimento Obrigatório")
+    private String senha;
+
     @NotEmpty(message = "O Logadouro não pode esta em Branco")
     private String logadouro;
 
@@ -80,6 +83,14 @@ public class ClienteNewDTO implements Serializable {
 
     public void setTipoCliente(Integer tipoCliente) {
         this.tipoCliente = tipoCliente;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public String getLogadouro() {
