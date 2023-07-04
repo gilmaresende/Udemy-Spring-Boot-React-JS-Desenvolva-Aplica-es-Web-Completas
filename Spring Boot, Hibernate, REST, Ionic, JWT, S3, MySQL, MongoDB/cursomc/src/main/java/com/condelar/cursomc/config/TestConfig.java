@@ -1,7 +1,6 @@
 package com.condelar.cursomc.config;
 
-import java.text.ParseException;
-
+import com.condelar.cursomc.services.DBService;
 import com.condelar.cursomc.services.EmailService;
 import com.condelar.cursomc.services.MockEmailservice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import com.condelar.cursomc.services.DBService;
+import java.text.ParseException;
 
 @Configuration
 @Profile("test")

@@ -22,7 +22,7 @@ public abstract class AbsetractEmailService implements EmailService {
     private TemplateEngine templateEngine;
 
     @Autowired
-    private JavaMailSender javaMailSender;
+    JavaMailSender javaMailSender;
 
     @Override
     public void serndOrderConfirmationEmail(Pedido obj) {

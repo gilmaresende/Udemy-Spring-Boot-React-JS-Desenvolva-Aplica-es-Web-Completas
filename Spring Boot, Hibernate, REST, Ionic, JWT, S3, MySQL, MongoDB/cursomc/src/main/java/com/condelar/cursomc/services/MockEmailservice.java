@@ -1,7 +1,7 @@
 package com.condelar.cursomc.services;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.SimpleMailMessage;
 
 import javax.mail.internet.MimeMessage;
