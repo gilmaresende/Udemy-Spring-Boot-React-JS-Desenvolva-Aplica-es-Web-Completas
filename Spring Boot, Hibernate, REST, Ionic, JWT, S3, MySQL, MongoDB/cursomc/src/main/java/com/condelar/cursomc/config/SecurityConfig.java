@@ -1,5 +1,6 @@
 package com.condelar.cursomc.config;
 
+import com.condelar.cursomc.security.AuthorizationFilter;
 import com.condelar.cursomc.security.JWTAuthenticationFilter;
 import com.condelar.cursomc.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers(PUBLIC_MATCHERS).permitAll().
                 anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new AuthorizationFilter(authenticationManager(), jwtUtil, userDetalsService));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
