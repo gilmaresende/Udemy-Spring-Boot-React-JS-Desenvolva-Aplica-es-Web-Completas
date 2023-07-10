@@ -1,7 +1,8 @@
 package com.condelar.cursomc.resources.exceptions;
 
-import com.condelar.cursomc.services.exeption.DataIntegrityException;
-import com.condelar.cursomc.services.exeption.ObjectNotFoundException;
+import com.condelar.cursomc.services.exception.AuthorizationException;
+import com.condelar.cursomc.services.exception.DataIntegrityException;
+import com.condelar.cursomc.services.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -33,5 +34,11 @@ public class ResourceExceptionHandler {
             err.addError(f.getField(), f.getDefaultMessage());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<StandardError> methodAuthorizationException(AuthorizationException e, HttpServletRequest request) {
+        StandardError err = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
     }
 }

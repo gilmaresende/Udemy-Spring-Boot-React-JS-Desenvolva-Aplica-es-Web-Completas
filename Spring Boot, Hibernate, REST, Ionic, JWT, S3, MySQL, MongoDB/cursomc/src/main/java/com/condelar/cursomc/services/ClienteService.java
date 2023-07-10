@@ -3,14 +3,16 @@ package com.condelar.cursomc.services;
 import com.condelar.cursomc.domain.Cidade;
 import com.condelar.cursomc.domain.Cliente;
 import com.condelar.cursomc.domain.Endereco;
+import com.condelar.cursomc.domain.enums.Perfil;
 import com.condelar.cursomc.domain.enums.TipoCliente;
 import com.condelar.cursomc.dto.ClienteDTO;
 import com.condelar.cursomc.dto.ClienteNewDTO;
-import com.condelar.cursomc.repositories.CidadeRepository;
 import com.condelar.cursomc.repositories.ClienteRepository;
 import com.condelar.cursomc.repositories.EnderecoRepository;
-import com.condelar.cursomc.services.exeption.DataIntegrityException;
-import com.condelar.cursomc.services.exeption.ObjectNotFoundException;
+import com.condelar.cursomc.security.UserSS;
+import com.condelar.cursomc.services.exception.AuthorizationException;
+import com.condelar.cursomc.services.exception.DataIntegrityException;
+import com.condelar.cursomc.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,13 @@ public class ClienteService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public Cliente find(Integer id) {
+
+        UserSS user = UserService.authenticated();
+
+        if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+            throw new AuthorizationException("Acesso Negado");
+        }
+
         Optional<Cliente> op = repo.findById(id);
         return op.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
     }

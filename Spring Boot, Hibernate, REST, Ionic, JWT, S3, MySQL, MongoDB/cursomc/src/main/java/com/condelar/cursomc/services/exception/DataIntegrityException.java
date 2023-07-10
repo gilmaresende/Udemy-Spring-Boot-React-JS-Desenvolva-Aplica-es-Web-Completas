@@ -1,4 +1,4 @@
-package com.condelar.cursomc.services.exeption;
+package com.condelar.cursomc.services.exception;
 
 public class DataIntegrityException extends RuntimeException {
     public DataIntegrityException(String s) {

@@ -4,7 +4,7 @@ import com.condelar.cursomc.domain.Categoria;
 import com.condelar.cursomc.domain.Produto;
 import com.condelar.cursomc.repositories.CategoriaRepository;
 import com.condelar.cursomc.repositories.ProdutoRepository;
-import com.condelar.cursomc.services.exeption.ObjectNotFoundException;
+import com.condelar.cursomc.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

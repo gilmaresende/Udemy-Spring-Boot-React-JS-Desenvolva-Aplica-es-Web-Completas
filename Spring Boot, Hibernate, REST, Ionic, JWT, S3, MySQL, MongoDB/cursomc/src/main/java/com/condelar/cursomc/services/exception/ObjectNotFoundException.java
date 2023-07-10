@@ -1,4 +1,4 @@
-package com.condelar.cursomc.services.exeption;
+package com.condelar.cursomc.services.exception;
 
 public class ObjectNotFoundException extends RuntimeException {
     public ObjectNotFoundException(String s) {
