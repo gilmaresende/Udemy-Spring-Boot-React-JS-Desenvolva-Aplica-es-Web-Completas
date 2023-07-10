@@ -1,14 +1,18 @@
 package com.condelar.cursomc.services;
 
-import com.condelar.cursomc.domain.ItemPedido;
-import com.condelar.cursomc.domain.PagamentoComBoleto;
-import com.condelar.cursomc.domain.Pedido;
+import com.condelar.cursomc.domain.*;
 import com.condelar.cursomc.domain.enums.EstadoPagamento;
+import com.condelar.cursomc.domain.enums.Perfil;
 import com.condelar.cursomc.repositories.ItemPedidoRepository;
 import com.condelar.cursomc.repositories.PagamentoRepository;
 import com.condelar.cursomc.repositories.PedidoRepository;
+import com.condelar.cursomc.security.UserSS;
+import com.condelar.cursomc.services.exception.AuthorizationException;
 import com.condelar.cursomc.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,5 +69,16 @@ public class PedidoService {
         itemPedidoRepository.saveAll(obj.getItens());
         emailService.sendOrderConfirmationHtmlEmail(obj);
         return obj;
+    }
+
+    public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        UserSS user = UserService.authenticated();
+        if (user == null) {
+            throw new AuthorizationException("Acesso Negado");
+        }
+
+        Cliente cliente = clienteService.find(user.getId());
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        return repo.findByCliente(cliente, pageRequest);
     }
 }
