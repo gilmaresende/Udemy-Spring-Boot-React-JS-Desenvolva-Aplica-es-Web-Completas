@@ -18,7 +18,6 @@ public class CursomcApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		s3Service.uploadFile("C:\\Users\\Gilmar\\Desktop\\tmp\\Corretto-Duke-no-text-1024x536.jpg");
 
 	}
 

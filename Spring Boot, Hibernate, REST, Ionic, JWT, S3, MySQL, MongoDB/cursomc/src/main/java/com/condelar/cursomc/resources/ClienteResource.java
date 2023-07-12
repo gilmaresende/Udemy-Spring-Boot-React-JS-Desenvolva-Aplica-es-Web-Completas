@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -78,5 +79,11 @@ public class ClienteResource {
                 orderBy,
                 direction).map(m -> new ClienteDTO(m));
         return ResponseEntity.ok().body(list);
+    }
+
+    @RequestMapping(value="/picture", method = RequestMethod.POST)
+    public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name="file") MultipartFile file) {
+        URI uri = service.updateProfilePicture(file);
+        return ResponseEntity.created(uri).build();
     }
 }
