@@ -151,4 +151,20 @@ public class ClienteService {
         repo.save(cliente);
         return uri;
     }
+
+    public Cliente findByEmail(String email) {
+        UserSS user = UserService.authenticated();
+
+        if (user == null || !user.hasRole(Perfil.ADMIN) && !email.equals(user.getUsername())) {
+            throw new AuthorizationException("Acesso Negado");
+        }
+
+        Cliente op = repo.findByEmail(email);
+
+        if (op == null) {
+            throw new ObjectNotFoundException(String.format("Cliente não encontrado com o email %s", email));
+        }
+        return op;
+
+    }
 }
